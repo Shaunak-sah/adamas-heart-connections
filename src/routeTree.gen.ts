@@ -10,20 +10,31 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as GuidelinesRouteImport } from './routes/guidelines'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as MatchesRouteImport } from './routes/matches'
-import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SafetyRouteImport } from './routes/safety'
-import { Route as VerificationPendingRouteImport } from './routes/verification-pending'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedDiscoverRouteImport } from './routes/_authenticated/discover'
+import { Route as AuthenticatedMatchesRouteImport } from './routes/_authenticated/matches'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedMessagesMatchIdRouteImport } from './routes/_authenticated/messages.$matchId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -31,29 +42,9 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DiscoverRoute = DiscoverRouteImport.update({
-  id: '/discover',
-  path: '/discover',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const GuidelinesRoute = GuidelinesRouteImport.update({
   id: '/guidelines',
   path: '/guidelines',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MatchesRoute = MatchesRouteImport.update({
-  id: '/matches',
-  path: '/matches',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MessagesRoute = MessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -61,9 +52,9 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SafetyRoute = SafetyRouteImport.update({
@@ -71,106 +62,132 @@ const SafetyRoute = SafetyRouteImport.update({
   path: '/safety',
   getParentRoute: () => rootRouteImport,
 } as any)
-const VerificationPendingRoute = VerificationPendingRouteImport.update({
-  id: '/verification-pending',
-  path: '/verification-pending',
-  getParentRoute: () => rootRouteImport,
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDiscoverRoute = AuthenticatedDiscoverRouteImport.update({
+  id: '/discover',
+  path: '/discover',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMatchesRoute = AuthenticatedMatchesRouteImport.update({
+  id: '/matches',
+  path: '/matches',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMessagesMatchIdRoute =
+  AuthenticatedMessagesMatchIdRouteImport.update({
+    id: '/messages/$matchId',
+    path: '/messages/$matchId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/discover': typeof DiscoverRoute
   '/guidelines': typeof GuidelinesRoute
-  '/login': typeof LoginRoute
-  '/matches': typeof MatchesRoute
-  '/messages': typeof MessagesRoute
   '/privacy': typeof PrivacyRoute
-  '/profile': typeof ProfileRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/safety': typeof SafetyRoute
-  '/verification-pending': typeof VerificationPendingRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/discover': typeof AuthenticatedDiscoverRoute
+  '/matches': typeof AuthenticatedMatchesRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/messages/$matchId': typeof AuthenticatedMessagesMatchIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/discover': typeof DiscoverRoute
   '/guidelines': typeof GuidelinesRoute
-  '/login': typeof LoginRoute
-  '/matches': typeof MatchesRoute
-  '/messages': typeof MessagesRoute
   '/privacy': typeof PrivacyRoute
-  '/profile': typeof ProfileRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/safety': typeof SafetyRoute
-  '/verification-pending': typeof VerificationPendingRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/discover': typeof AuthenticatedDiscoverRoute
+  '/matches': typeof AuthenticatedMatchesRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/messages/$matchId': typeof AuthenticatedMessagesMatchIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/discover': typeof DiscoverRoute
   '/guidelines': typeof GuidelinesRoute
-  '/login': typeof LoginRoute
-  '/matches': typeof MatchesRoute
-  '/messages': typeof MessagesRoute
   '/privacy': typeof PrivacyRoute
-  '/profile': typeof ProfileRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/safety': typeof SafetyRoute
-  '/verification-pending': typeof VerificationPendingRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/discover': typeof AuthenticatedDiscoverRoute
+  '/_authenticated/matches': typeof AuthenticatedMatchesRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/messages/$matchId': typeof AuthenticatedMessagesMatchIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/contact'
-    | '/discover'
     | '/guidelines'
-    | '/login'
-    | '/matches'
-    | '/messages'
     | '/privacy'
-    | '/profile'
+    | '/reset-password'
     | '/safety'
-    | '/verification-pending'
+    | '/admin'
+    | '/discover'
+    | '/matches'
+    | '/profile'
+    | '/messages/$matchId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/contact'
-    | '/discover'
     | '/guidelines'
-    | '/login'
-    | '/matches'
-    | '/messages'
     | '/privacy'
-    | '/profile'
+    | '/reset-password'
     | '/safety'
-    | '/verification-pending'
+    | '/admin'
+    | '/discover'
+    | '/matches'
+    | '/profile'
+    | '/messages/$matchId'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
+    | '/auth'
     | '/contact'
-    | '/discover'
     | '/guidelines'
-    | '/login'
-    | '/matches'
-    | '/messages'
     | '/privacy'
-    | '/profile'
+    | '/reset-password'
     | '/safety'
-    | '/verification-pending'
+    | '/_authenticated/admin'
+    | '/_authenticated/discover'
+    | '/_authenticated/matches'
+    | '/_authenticated/profile'
+    | '/_authenticated/messages/$matchId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
-  DiscoverRoute: typeof DiscoverRoute
   GuidelinesRoute: typeof GuidelinesRoute
-  LoginRoute: typeof LoginRoute
-  MatchesRoute: typeof MatchesRoute
-  MessagesRoute: typeof MessagesRoute
   PrivacyRoute: typeof PrivacyRoute
-  ProfileRoute: typeof ProfileRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SafetyRoute: typeof SafetyRoute
-  VerificationPendingRoute: typeof VerificationPendingRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -182,18 +199,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/discover': {
-      id: '/discover'
-      path: '/discover'
-      fullPath: '/discover'
-      preLoaderRoute: typeof DiscoverRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/guidelines': {
@@ -203,27 +227,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuidelinesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/matches': {
-      id: '/matches'
-      path: '/matches'
-      fullPath: '/matches'
-      preLoaderRoute: typeof MatchesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/messages': {
-      id: '/messages'
-      path: '/messages'
-      fullPath: '/messages'
-      preLoaderRoute: typeof MessagesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
@@ -231,11 +234,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/safety': {
@@ -245,28 +248,72 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SafetyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/verification-pending': {
-      id: '/verification-pending'
-      path: '/verification-pending'
-      fullPath: '/verification-pending'
-      preLoaderRoute: typeof VerificationPendingRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/discover': {
+      id: '/_authenticated/discover'
+      path: '/discover'
+      fullPath: '/discover'
+      preLoaderRoute: typeof AuthenticatedDiscoverRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/matches': {
+      id: '/_authenticated/matches'
+      path: '/matches'
+      fullPath: '/matches'
+      preLoaderRoute: typeof AuthenticatedMatchesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/messages/$matchId': {
+      id: '/_authenticated/messages/$matchId'
+      path: '/messages/$matchId'
+      fullPath: '/messages/$matchId'
+      preLoaderRoute: typeof AuthenticatedMessagesMatchIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedDiscoverRoute: typeof AuthenticatedDiscoverRoute
+  AuthenticatedMatchesRoute: typeof AuthenticatedMatchesRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedMessagesMatchIdRoute: typeof AuthenticatedMessagesMatchIdRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedDiscoverRoute: AuthenticatedDiscoverRoute,
+  AuthenticatedMatchesRoute: AuthenticatedMatchesRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedMessagesMatchIdRoute: AuthenticatedMessagesMatchIdRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
-  DiscoverRoute: DiscoverRoute,
   GuidelinesRoute: GuidelinesRoute,
-  LoginRoute: LoginRoute,
-  MatchesRoute: MatchesRoute,
-  MessagesRoute: MessagesRoute,
   PrivacyRoute: PrivacyRoute,
-  ProfileRoute: ProfileRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SafetyRoute: SafetyRoute,
-  VerificationPendingRoute: VerificationPendingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
