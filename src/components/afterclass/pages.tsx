@@ -2,7 +2,7 @@ import { ArrowRight, BookOpen, Heart, LockKeyhole, MessageCircle, Shield, Sparkl
 import { Link } from "@tanstack/react-router";
 
 import { demoProfiles, type DemoProfile } from "@/components/afterclass/data";
-import { ContentSection, PageHeading, SiteFrame, VerificationLock } from "@/components/afterclass/shell";
+import { ContentSection, PageHeading, SiteFrame } from "@/components/afterclass/shell";
 import { Button } from "@/components/ui/button";
 
 const pageCopy = {

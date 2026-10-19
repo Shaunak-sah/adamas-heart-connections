@@ -25,7 +25,7 @@ function AuthPage() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!isStudentEmail(email)) return toast.error(`Use your student email ending in ${STUDENT_DOMAIN}`);
+    if (!isStudentEmail(email)) { toast.error(`Use your student email ending in ${STUDENT_DOMAIN}`); return; }
     setBusy(true);
     try {
       if (mode === "up") {

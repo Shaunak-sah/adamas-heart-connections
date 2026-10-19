@@ -38,7 +38,7 @@ function Admin() {
   async function review(userId: string, status: "approved" | "rejected") {
     const note = status === "rejected" ? prompt("Reason shown to the student (optional)") ?? "" : null;
     const { error } = await supabase.from("verifications").update({ status, note }).eq("user_id", userId);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["admin-verifications"] });
   }
 

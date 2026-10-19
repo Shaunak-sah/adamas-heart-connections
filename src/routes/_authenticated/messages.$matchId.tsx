@@ -57,14 +57,14 @@ function Chat() {
     if (!body || !uid) return;
     setText("");
     const { error } = await supabase.from("messages").insert({ match_id: matchId, sender_id: uid, body });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["messages", matchId] });
   }
 
   async function block() {
     if (!info || !uid || !confirm(`Block ${info.name}? This ends the match for both of you.`)) return;
     const { error } = await supabase.from("blocks").insert({ blocker: uid, blocked: info.otherId });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Blocked");
     qc.invalidateQueries({ queryKey: ["matches"] });
     navigate({ to: "/matches" });
@@ -75,7 +75,7 @@ function Chat() {
     const reason = prompt("What happened? Moderators will review this.");
     if (!reason || reason.trim().length < 3) return;
     const { error } = await supabase.from("reports").insert({ reporter: uid, reported: info.otherId, reason: reason.trim() });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Report sent to moderators");
   }
 
