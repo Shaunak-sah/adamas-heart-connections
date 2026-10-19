@@ -102,7 +102,7 @@ export function LandingPage() {
               <h1 className="font-display text-5xl font-semibold leading-[1.04] text-foreground md:text-6xl">Some connections happen <span className="text-primary">after class.</span></h1>
               <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">A more personal way to meet people from your university.</p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Button asChild size="lg"><Link to="/login">Get started <ArrowRight aria-hidden="true" /></Link></Button>
+                <Button asChild size="lg"><Link to="/auth">Get started <ArrowRight aria-hidden="true" /></Link></Button>
                 <Button asChild size="lg" variant="outline"><Link to="/guidelines">How it works</Link></Button>
               </div>
               <p className="mt-5 max-w-lg text-xs leading-5 text-muted-foreground">An independent student-focused project. Not affiliated with or endorsed by Adamas University.</p>
@@ -116,14 +116,14 @@ export function LandingPage() {
         <section className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-20">
           <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">A thoughtful beginning</p><h2 className="mt-3 font-display text-3xl font-semibold text-foreground">Good connections start with trust.</h2></div><p className="max-w-md text-sm leading-6 text-muted-foreground">A quieter space for adult students to meet, with care built into every step.</p></div>
           <div className="grid gap-0 border-y border-border md:grid-cols-3 md:divide-x md:divide-border">
-            <Feature icon={<Shield aria-hidden="true" />} title="A verified community" text="Real access requires trusted adult and student verification. Neither is available yet." />
-            <Feature icon={<Heart aria-hidden="true" />} title="Mutual connections" text="A match would only happen when both people choose to connect." />
+            <Feature icon={<Shield aria-hidden="true" />} title="A verified community" text="Only 18+ students with an @stu.adamasuniversity.ac.in email and an approved college ID can join." />
+            <Feature icon={<Heart aria-hidden="true" />} title="Mutual connections" text="A match only happens when both people choose to connect." />
             <Feature icon={<LockKeyhole aria-hidden="true" />} title="Privacy first" text="Personal details, private likes, and conversations stay protected by design." />
           </div>
         </section>
         <section className="border-y border-border bg-panel">
           <div className="mx-auto grid max-w-7xl gap-8 px-5 py-14 md:grid-cols-[1fr_auto] md:items-center md:px-8">
-            <div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">A note on access</p><h2 className="mt-3 font-display text-2xl font-semibold text-foreground">Not open to real profiles just yet.</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">This preview contains fictional examples only. Real discovery and messaging stay closed until an approved student-verification path is ready.</p></div>
+            <div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">How to join</p><h2 className="mt-3 font-display text-2xl font-semibold text-foreground">Three steps, then you are in.</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">Sign up with your student email, confirm it, then build your profile and upload your college ID. Once a moderator approves you, discovery and messaging open up.</p></div>
             <Button asChild variant="outline"><Link to="/safety">Our safety principles <ArrowRight aria-hidden="true" /></Link></Button>
           </div>
         </section>
@@ -144,11 +144,9 @@ export function InformationPage({ kind }: { kind: PageKind }) {
     <SiteFrame>
       <main className="mx-auto max-w-7xl px-5 py-14 md:px-8 md:py-20">
         <PageHeading eyebrow={info.eyebrow} title={info.title} description={info.description} />
-        <div className="mt-8 max-w-3xl"><VerificationLock /></div>
         {isDiscovery && <section className="mt-12"><div className="mb-5 flex items-end justify-between gap-4"><h2 className="font-display text-xl font-semibold text-foreground">A few fictional faces</h2><span className="text-xs text-muted-foreground">Example profiles only</span></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{demoProfiles.map((profile) => <ProfilePreview key={profile.name} profile={profile} />)}</div></section>}
         {isMessaging && <section className="mt-12 max-w-3xl border border-border bg-card p-5 md:p-7"><div className="flex items-center gap-3"><MessageCircle aria-hidden="true" className="size-5 text-primary" /><p className="font-display text-lg font-semibold text-foreground">No conversations in this preview</p></div><p className="mt-3 text-sm leading-6 text-muted-foreground">No messages are sent or stored here. Conversations will only be possible between mutual matches after safety checks are in place.</p></section>}
         <div className="mt-12 max-w-3xl"><ContentSection title={info.section}><p>{info.body}</p><p className="mt-4 inline-flex items-center gap-2"><BookOpen aria-hidden="true" className="size-4 text-primary" />Learn about <Link to="/guidelines" className="text-foreground underline underline-offset-4">community guidelines</Link> and <Link to="/privacy" className="text-foreground underline underline-offset-4">privacy</Link>.</p></ContentSection></div>
-        {kind === "login" && <div className="mt-8"><Button asChild variant="outline"><Link to="/verification-pending">View verification status</Link></Button></div>}
       </main>
     </SiteFrame>
   );
