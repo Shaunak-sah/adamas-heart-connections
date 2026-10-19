@@ -14,16 +14,235 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      blocks: {
+        Row: {
+          blocked: string
+          blocker: string
+          created_at: string
+        }
+        Insert: {
+          blocked: string
+          blocker: string
+          created_at?: string
+        }
+        Update: {
+          blocked?: string
+          blocker?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      matches: {
+        Row: {
+          created_at: string
+          id: string
+          user_a: string
+          user_b: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          user_a: string
+          user_b: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          user_a?: string
+          user_b?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          match_id: string
+          sender_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          match_id: string
+          sender_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          match_id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          bio: string | null
+          birthdate: string | null
+          course: string | null
+          created_at: string
+          display_name: string | null
+          email: string | null
+          gender: string | null
+          id: string
+          interested_in: string | null
+          interests: string[]
+          onboarded: boolean
+          photo_path: string | null
+          year: string | null
+        }
+        Insert: {
+          bio?: string | null
+          birthdate?: string | null
+          course?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          gender?: string | null
+          id: string
+          interested_in?: string | null
+          interests?: string[]
+          onboarded?: boolean
+          photo_path?: string | null
+          year?: string | null
+        }
+        Update: {
+          bio?: string | null
+          birthdate?: string | null
+          course?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          gender?: string | null
+          id?: string
+          interested_in?: string | null
+          interests?: string[]
+          onboarded?: boolean
+          photo_path?: string | null
+          year?: string | null
+        }
+        Relationships: []
+      }
+      reports: {
+        Row: {
+          created_at: string
+          id: string
+          reason: string
+          reported: string
+          reporter: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reason: string
+          reported: string
+          reporter: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reason?: string
+          reported?: string
+          reporter?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      swipes: {
+        Row: {
+          created_at: string
+          liked: boolean
+          swiper: string
+          target: string
+        }
+        Insert: {
+          created_at?: string
+          liked: boolean
+          swiper: string
+          target: string
+        }
+        Update: {
+          created_at?: string
+          liked?: boolean
+          swiper?: string
+          target?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      verifications: {
+        Row: {
+          id_card_path: string
+          note: string | null
+          reviewed_at: string | null
+          status: string
+          submitted_at: string
+          user_id: string
+        }
+        Insert: {
+          id_card_path: string
+          note?: string | null
+          reviewed_at?: string | null
+          status?: string
+          submitted_at?: string
+          user_id: string
+        }
+        Update: {
+          id_card_path?: string
+          note?: string | null
+          reviewed_at?: string | null
+          status?: string
+          submitted_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_approved: { Args: { _uid: string }; Returns: boolean }
+      is_blocked_between: { Args: { _a: string; _b: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +369,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
