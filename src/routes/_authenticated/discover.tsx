@@ -1,0 +1,75 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Heart, X } from "lucide-react";
+import { toast } from "sonner";
+
+import { Gate, PageHeading } from "@/components/afterclass/shell";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { ageFrom, meQuery, signedUrls } from "@/lib/afterclass";
+
+export const Route = createFileRoute("/_authenticated/discover")({
+  head: () => ({ meta: [{ title: "Discover · AFTERCLASS" }, { name: "description", content: "Meet verified Adamas students." }] }),
+  component: () => <Gate><Discover /></Gate>,
+});
+
+function Discover() {
+  const qc = useQueryClient();
+  const { data: me } = useQuery(meQuery);
+  const { data, isLoading } = useQuery({
+    queryKey: ["discover"],
+    enabled: !!me,
+    queryFn: async () => {
+      const uid = me!.user.id;
+      const [{ data: swiped }, { data: profiles }] = await Promise.all([
+        supabase.from("swipes").select("target").eq("swiper", uid),
+        supabase.from("profiles").select("id, display_name, birthdate, gender, interested_in, course, year, bio, interests, photo_path").neq("id", uid).limit(200),
+      ]);
+      const seen = new Set((swiped ?? []).map((s) => s.target));
+      const mine = me!.profile!;
+      const list = (profiles ?? []).filter((p) => !seen.has(p.id)
+        && (mine.interested_in === "everyone" || p.gender === mine.interested_in)
+        && (p.interested_in === "everyone" || p.interested_in === mine.gender));
+      const urls = await signedUrls("photos", list.map((p) => p.photo_path));
+      return list.map((p) => ({ ...p, photo: p.photo_path ? urls[p.photo_path] : undefined }));
+    },
+  });
+
+  async function swipe(target: string, liked: boolean) {
+    const { error } = await supabase.from("swipes").insert({ swiper: me!.user.id, target, liked });
+    if (error) return toast.error(error.message);
+    if (liked) {
+      const { data: m } = await supabase.from("matches").select("id").or(`user_a.eq.${target},user_b.eq.${target}`).maybeSingle();
+      if (m) toast.success("It’s a match! Say hello from your matches.");
+    }
+    qc.setQueryData(["discover"], (old: typeof data) => old?.filter((p) => p.id !== target));
+    qc.invalidateQueries({ queryKey: ["matches"] });
+  }
+
+  const current = data?.[0];
+
+  return (
+    <main className="mx-auto max-w-7xl px-5 py-14 md:px-8 md:py-20">
+      <PageHeading eyebrow="Discover" title="Meet beyond the lecture hall." description="Every profile here is a verified, 18+ Adamas student. Likes stay private unless they’re mutual." />
+      <div className="mt-10 max-w-md">
+        {isLoading ? <p className="text-sm text-muted-foreground">Finding people…</p> : !current ? (
+          <div className="border border-border p-8 text-center"><p className="font-display text-lg text-foreground">You’re all caught up.</p><p className="mt-2 text-sm text-muted-foreground">Check back later as more students join.</p><Button asChild variant="outline" className="mt-5"><Link to="/matches">See matches</Link></Button></div>
+        ) : (
+          <article className="border border-border bg-card">
+            <div className="aspect-[4/5] overflow-hidden bg-secondary">{current.photo && <img src={current.photo} alt={current.display_name ?? ""} className="size-full object-cover" />}</div>
+            <div className="p-5">
+              <div className="flex items-baseline justify-between gap-2"><h2 className="font-display text-2xl font-semibold text-foreground">{current.display_name}, {ageFrom(current.birthdate)}</h2><span className="text-xs text-muted-foreground">{current.year}</span></div>
+              <p className="mt-1 text-sm text-muted-foreground">{current.course}</p>
+              {current.bio && <p className="mt-3 text-sm leading-6 text-secondary-foreground">{current.bio}</p>}
+              <div className="mt-4 flex flex-wrap gap-2">{(current.interests ?? []).map((i) => <span key={i} className="border border-border px-2 py-1 text-[11px] text-muted-foreground">{i}</span>)}</div>
+              <div className="mt-6 grid grid-cols-2 gap-3">
+                <Button variant="outline" size="lg" onClick={() => swipe(current.id, false)}><X aria-hidden="true" /> Pass</Button>
+                <Button size="lg" onClick={() => swipe(current.id, true)}><Heart aria-hidden="true" /> Like</Button>
+              </div>
+            </div>
+          </article>
+        )}
+      </div>
+    </main>
+  );
+}

@@ -1,13 +1,15 @@
-import { Link } from "@tanstack/react-router";
-import { ArrowUpRight, LockKeyhole, ShieldCheck } from "lucide-react";
-import type { ReactNode } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { ArrowUpRight, LogOut } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { meQuery } from "@/lib/afterclass";
 
 const primaryLinks = [
   { to: "/discover", label: "Discover" },
   { to: "/matches", label: "Matches" },
-  { to: "/messages", label: "Messages" },
   { to: "/profile", label: "Profile" },
 ] as const;
 
@@ -20,40 +22,59 @@ export function BrandMark({ compact = false }: { compact?: boolean }) {
   );
 }
 
+function useSignedIn() {
+  const [signedIn, setSignedIn] = useState(false);
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSignedIn(!!data.session));
+    const { data } = supabase.auth.onAuthStateChange((_e, s) => setSignedIn(!!s));
+    return () => data.subscription.unsubscribe();
+  }, []);
+  return signedIn;
+}
+
 export function SiteHeader() {
+  const signedIn = useSignedIn();
+  const { data: me } = useQuery({ ...meQuery, enabled: signedIn });
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  async function signOut() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    navigate({ to: "/auth", replace: true });
+  }
+
+  const links = signedIn ? [...primaryLinks, ...(me?.isAdmin ? [{ to: "/admin", label: "Admin" } as const] : [])] : [];
+
   return (
     <header className="relative z-10 border-b border-border bg-background">
       <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-5 px-5 md:px-8">
         <BrandMark />
         <nav aria-label="Main navigation" className="hidden items-center gap-7 md:flex">
-          {primaryLinks.map((item) => (
-            <Link key={item.to} to={item.to} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+          {links.map((item) => (
+            <Link key={item.to} to={item.to} className="text-sm text-muted-foreground transition-colors hover:text-foreground" activeProps={{ className: "text-foreground" }}>
               {item.label}
             </Link>
           ))}
           <Link to="/safety" className="text-sm text-muted-foreground transition-colors hover:text-foreground">Safety</Link>
         </nav>
-        <Button asChild size="sm" variant="outline" className="border-border bg-transparent">
-          <Link to="/login">Sign in <ArrowUpRight aria-hidden="true" /></Link>
-        </Button>
+        {signedIn ? (
+          <Button size="sm" variant="outline" onClick={signOut}>Sign out <LogOut aria-hidden="true" /></Button>
+        ) : (
+          <Button asChild size="sm" variant="outline">
+            <Link to="/auth">Sign in <ArrowUpRight aria-hidden="true" /></Link>
+          </Button>
+        )}
       </div>
-      <nav aria-label="Mobile navigation" className="flex gap-6 overflow-x-auto border-t border-border px-5 py-3 md:hidden">
-        {primaryLinks.map((item) => (
-          <Link key={item.to} to={item.to} className="shrink-0 text-xs text-muted-foreground">{item.label}</Link>
-        ))}
-        <Link to="/safety" className="shrink-0 text-xs text-muted-foreground">Safety</Link>
-      </nav>
+      {links.length > 0 && (
+        <nav aria-label="Mobile navigation" className="flex gap-6 overflow-x-auto border-t border-border px-5 py-3 md:hidden">
+          {links.map((item) => (
+            <Link key={item.to} to={item.to} className="shrink-0 text-xs text-muted-foreground" activeProps={{ className: "text-foreground" }}>{item.label}</Link>
+          ))}
+        </nav>
+      )}
     </header>
-  );
-}
-
-export function PreviewNotice() {
-  return (
-    <div className="border-b border-primary/25 bg-primary/10 px-5 py-2.5 text-center text-xs text-foreground">
-      <span className="inline-flex items-center justify-center gap-2"><LockKeyhole aria-hidden="true" className="size-3.5 text-primary" />
-        Private preview · Verification isn’t available · No real profiles or interactions
-      </span>
-    </div>
   );
 }
 
@@ -75,7 +96,7 @@ export function SiteFooter() {
 }
 
 export function SiteFrame({ children }: { children: ReactNode }) {
-  return <div className="min-h-screen bg-background"><SiteHeader /><PreviewNotice />{children}<SiteFooter /></div>;
+  return <div className="flex min-h-screen flex-col bg-background"><SiteHeader /><div className="flex-1">{children}</div><SiteFooter /></div>;
 }
 
 export function PageHeading({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
@@ -92,6 +113,19 @@ export function ContentSection({ title, children }: { title: string; children: R
   return <section className="border-t border-border py-7"><h2 className="font-display text-xl font-semibold text-foreground">{title}</h2><div className="mt-4 text-sm leading-7 text-muted-foreground">{children}</div></section>;
 }
 
-export function VerificationLock() {
-  return <div className="flex items-start gap-3 border border-primary/30 bg-primary/5 p-4 text-sm leading-6 text-foreground"><ShieldCheck aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-primary" /><p>Real student access stays closed until an approved verification method and adult eligibility checks are in place.</p></div>;
+export function Gate({ children }: { children: ReactNode }) {
+  const { data: me, isLoading } = useQuery(meQuery);
+  if (isLoading || !me) return <p className="mx-auto max-w-7xl px-5 py-14 text-sm text-muted-foreground md:px-8">Loading…</p>;
+  if (!me.approved) {
+    const v = me.verification;
+    const title = !me.profile?.onboarded ? "Finish your profile first." : !v ? "Upload your college ID." : v.status === "rejected" ? "Your ID wasn’t approved." : "Your ID is being reviewed.";
+    const text = v?.status === "rejected" ? (v.note || "Please upload a clearer photo of your college ID.") : !v || !me.profile?.onboarded ? "Discovery and messaging open once your profile is complete and a moderator approves your college ID." : "A moderator will check it shortly. You’ll be able to meet people as soon as you’re approved.";
+    return (
+      <main className="mx-auto max-w-7xl px-5 py-14 md:px-8 md:py-20">
+        <PageHeading eyebrow="Almost there" title={title} description={text} />
+        <Button asChild className="mt-8"><Link to="/profile">Go to my profile</Link></Button>
+      </main>
+    );
+  }
+  return <>{children}</>;
 }

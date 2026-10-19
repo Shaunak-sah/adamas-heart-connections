@@ -11,15 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as GuidelinesRouteImport } from './routes/guidelines'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as MatchesRouteImport } from './routes/matches'
-import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as SafetyRouteImport } from './routes/safety'
-import { Route as VerificationPendingRouteImport } from './routes/verification-pending'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -31,29 +25,9 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DiscoverRoute = DiscoverRouteImport.update({
-  id: '/discover',
-  path: '/discover',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const GuidelinesRoute = GuidelinesRouteImport.update({
   id: '/guidelines',
   path: '/guidelines',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MatchesRoute = MatchesRouteImport.update({
-  id: '/matches',
-  path: '/matches',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MessagesRoute = MessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -61,116 +35,48 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SafetyRoute = SafetyRouteImport.update({
   id: '/safety',
   path: '/safety',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VerificationPendingRoute = VerificationPendingRouteImport.update({
-  id: '/verification-pending',
-  path: '/verification-pending',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
-  '/discover': typeof DiscoverRoute
   '/guidelines': typeof GuidelinesRoute
-  '/login': typeof LoginRoute
-  '/matches': typeof MatchesRoute
-  '/messages': typeof MessagesRoute
   '/privacy': typeof PrivacyRoute
-  '/profile': typeof ProfileRoute
   '/safety': typeof SafetyRoute
-  '/verification-pending': typeof VerificationPendingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
-  '/discover': typeof DiscoverRoute
   '/guidelines': typeof GuidelinesRoute
-  '/login': typeof LoginRoute
-  '/matches': typeof MatchesRoute
-  '/messages': typeof MessagesRoute
   '/privacy': typeof PrivacyRoute
-  '/profile': typeof ProfileRoute
   '/safety': typeof SafetyRoute
-  '/verification-pending': typeof VerificationPendingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
-  '/discover': typeof DiscoverRoute
   '/guidelines': typeof GuidelinesRoute
-  '/login': typeof LoginRoute
-  '/matches': typeof MatchesRoute
-  '/messages': typeof MessagesRoute
   '/privacy': typeof PrivacyRoute
-  '/profile': typeof ProfileRoute
   '/safety': typeof SafetyRoute
-  '/verification-pending': typeof VerificationPendingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/contact'
-    | '/discover'
-    | '/guidelines'
-    | '/login'
-    | '/matches'
-    | '/messages'
-    | '/privacy'
-    | '/profile'
-    | '/safety'
-    | '/verification-pending'
+  fullPaths: '/' | '/contact' | '/guidelines' | '/privacy' | '/safety'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/contact'
-    | '/discover'
-    | '/guidelines'
-    | '/login'
-    | '/matches'
-    | '/messages'
-    | '/privacy'
-    | '/profile'
-    | '/safety'
-    | '/verification-pending'
-  id:
-    | '__root__'
-    | '/'
-    | '/contact'
-    | '/discover'
-    | '/guidelines'
-    | '/login'
-    | '/matches'
-    | '/messages'
-    | '/privacy'
-    | '/profile'
-    | '/safety'
-    | '/verification-pending'
+  to: '/' | '/contact' | '/guidelines' | '/privacy' | '/safety'
+  id: '__root__' | '/' | '/contact' | '/guidelines' | '/privacy' | '/safety'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactRoute: typeof ContactRoute
-  DiscoverRoute: typeof DiscoverRoute
   GuidelinesRoute: typeof GuidelinesRoute
-  LoginRoute: typeof LoginRoute
-  MatchesRoute: typeof MatchesRoute
-  MessagesRoute: typeof MessagesRoute
   PrivacyRoute: typeof PrivacyRoute
-  ProfileRoute: typeof ProfileRoute
   SafetyRoute: typeof SafetyRoute
-  VerificationPendingRoute: typeof VerificationPendingRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -189,39 +95,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/discover': {
-      id: '/discover'
-      path: '/discover'
-      fullPath: '/discover'
-      preLoaderRoute: typeof DiscoverRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/guidelines': {
       id: '/guidelines'
       path: '/guidelines'
       fullPath: '/guidelines'
       preLoaderRoute: typeof GuidelinesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/matches': {
-      id: '/matches'
-      path: '/matches'
-      fullPath: '/matches'
-      preLoaderRoute: typeof MatchesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/messages': {
-      id: '/messages'
-      path: '/messages'
-      fullPath: '/messages'
-      preLoaderRoute: typeof MessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -231,25 +109,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/safety': {
       id: '/safety'
       path: '/safety'
       fullPath: '/safety'
       preLoaderRoute: typeof SafetyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/verification-pending': {
-      id: '/verification-pending'
-      path: '/verification-pending'
-      fullPath: '/verification-pending'
-      preLoaderRoute: typeof VerificationPendingRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -258,15 +122,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
-  DiscoverRoute: DiscoverRoute,
   GuidelinesRoute: GuidelinesRoute,
-  LoginRoute: LoginRoute,
-  MatchesRoute: MatchesRoute,
-  MessagesRoute: MessagesRoute,
   PrivacyRoute: PrivacyRoute,
-  ProfileRoute: ProfileRoute,
   SafetyRoute: SafetyRoute,
-  VerificationPendingRoute: VerificationPendingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

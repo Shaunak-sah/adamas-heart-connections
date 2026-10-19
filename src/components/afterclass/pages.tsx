@@ -38,8 +38,8 @@ const pageCopy = {
     eyebrow: "Safety, by design",
     title: "Privacy is part of the connection.",
     description: "A dating community should make boundaries easy to set and trust difficult to fake.",
-    section: "Before any real profiles appear",
-    body: "The planned product includes blocking, reporting, profile visibility controls, and account deletion. Those tools must be enforced in trusted systems—not just drawn on a screen—before real people can participate.",
+    section: "Tools you can use",
+    body: "Only approved 18+ students can see profiles. You can block or report anyone from a chat — blocking instantly ends the match and hides you from each other. Reports go straight to moderators.",
   },
   login: {
     eyebrow: "A private preview",
@@ -150,10 +150,6 @@ export function InformationPage({ kind }: { kind: PageKind }) {
       </main>
     </SiteFrame>
   );
-}
-
-export function VerificationStatusPage() {
-  return <SiteFrame><main className="mx-auto max-w-7xl px-5 py-14 md:px-8 md:py-20"><PageHeading eyebrow="Verification" title="Verification is not available yet." description="An approved student-verification method has not been configured for AFTERCLASS." /><div className="mt-8 max-w-3xl"><VerificationLock /><div className="mt-8"><ContentSection title="Your status"><p>No sign-in or verification was attempted. There is no university login connection here, and you should never share your university password.</p></ContentSection></div><Button asChild className="mt-5" variant="outline"><Link to="/">Back to AFTERCLASS</Link></Button></div></main></SiteFrame>;
 }
 
 export function getPageInfo(kind: PageKind) {
