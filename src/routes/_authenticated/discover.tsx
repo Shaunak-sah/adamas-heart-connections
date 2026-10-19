@@ -37,7 +37,7 @@ function Discover() {
 
   async function swipe(target: string, liked: boolean) {
     const { error } = await supabase.from("swipes").insert({ swiper: me!.user.id, target, liked });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     if (liked) {
       const { data: m } = await supabase.from("matches").select("id").or(`user_a.eq.${target},user_b.eq.${target}`).maybeSingle();
       if (m) toast.success("It’s a match! Say hello from your matches.");

@@ -40,7 +40,7 @@ function ProfilePage() {
   async function save(e: React.FormEvent) {
     e.preventDefault();
     if (!me) return;
-    if (!photo && !me.profile?.photo_path) return toast.error("Add a profile photo");
+    if (!photo && !me.profile?.photo_path) { toast.error("Add a profile photo"); return; }
     setBusy(true);
     try {
       let photo_path = me.profile?.photo_path ?? null;
