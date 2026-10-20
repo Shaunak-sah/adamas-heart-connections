@@ -99,6 +99,7 @@ export type Database = {
           interests: string[]
           onboarded: boolean
           photo_path: string | null
+          photo_paths: string[]
           year: string | null
         }
         Insert: {
@@ -114,6 +115,7 @@ export type Database = {
           interests?: string[]
           onboarded?: boolean
           photo_path?: string | null
+          photo_paths?: string[]
           year?: string | null
         }
         Update: {
@@ -129,6 +131,7 @@ export type Database = {
           interests?: string[]
           onboarded?: boolean
           photo_path?: string | null
+          photo_paths?: string[]
           year?: string | null
         }
         Relationships: []
