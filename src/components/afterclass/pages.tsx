@@ -44,7 +44,7 @@ export function ProfilePreview({ profile, featured = false }: { profile: DemoPro
       <div className="relative aspect-[4/5] overflow-hidden bg-secondary">
         <img src={profile.photo} alt={`Fictional demo portrait for ${profile.name}`} className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
         <span className="absolute left-3 top-3 border border-border bg-background/90 px-2 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-foreground">Fictional demo</span>
-        {featured && <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 text-xs text-foreground"><Sparkles aria-hidden="true" className="size-3.5 text-primary" /> A little more like you</span>}
+        {featured && <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 border border-border bg-background/90 px-2 py-1 text-xs text-foreground"><Sparkles aria-hidden="true" className="size-3.5 text-primary" /> A little more like you</span>}
       </div>
       <div className="p-4">
         <div className="flex items-baseline justify-between gap-2"><h3 className="font-display text-lg font-semibold text-foreground">{profile.name}, {profile.age}</h3><span className="text-xs text-muted-foreground">{profile.year}</span></div>
