@@ -89,7 +89,7 @@ function ProfilePage() {
         <div className="space-y-2"><Label htmlFor="dob">Date of birth (18+ only)</Label><Input id="dob" type="date" required value={form.birthdate} onChange={set("birthdate")} /></div>
         <div className="space-y-2">
           <Label htmlFor="gender">I am</Label>
-          <Select value={form.gender || undefined} onValueChange={(v) => setForm({ ...form, gender: v })}>
+          <Select value={form.gender} onValueChange={(v) => setForm({ ...form, gender: v })}>
             <SelectTrigger id="gender" className="w-full"><SelectValue placeholder="Choose…" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="woman">A woman</SelectItem>
