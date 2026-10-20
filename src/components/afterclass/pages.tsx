@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Heart, LockKeyhole, MessageCircle, Shield, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, Heart, LockKeyhole, Shield, Sparkles } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
 import { demoProfiles, type DemoProfile } from "@/components/afterclass/data";
@@ -6,34 +6,6 @@ import { ContentSection, PageHeading, SiteFrame } from "@/components/afterclass/
 import { Button } from "@/components/ui/button";
 
 const pageCopy = {
-  discover: {
-    eyebrow: "A quieter kind of discovery",
-    title: "Meet beyond the lecture hall.",
-    description: "A glimpse of the considered profiles and shared interests AFTERCLASS is being designed around.",
-    section: "A preview, not a people-finder",
-    body: "These portraits and profiles are fictional examples. Real discovery stays closed until both adult eligibility and an approved student-verification process can be trusted.",
-  },
-  matches: {
-    eyebrow: "Mutual, by design",
-    title: "A connection goes both ways.",
-    description: "Matches would only begin when two eligible students choose each other.",
-    section: "No one-sided like lists",
-    body: "This preview does not reveal who liked whom or create real matches. Private likes and mutual matching require verified access and trusted safeguards first.",
-  },
-  messages: {
-    eyebrow: "Conversations, kept private",
-    title: "A little room to get to know someone.",
-    description: "Messaging is being designed for mutual matches, with clear controls to block, report, or leave a conversation.",
-    section: "Messaging is not active",
-    body: "There are no real conversations in this preview. Messages will remain unavailable until eligibility, matching, privacy, and access controls are verified end to end.",
-  },
-  profile: {
-    eyebrow: "A profile that feels like you",
-    title: "Share the details that matter.",
-    description: "The planned profile keeps the focus on interests and conversation, with privacy controls at the centre.",
-    section: "A considered profile",
-    body: "A future profile may include a display name, short bio, interests, and optional course details. Sensitive personal details and exact location will never be shown publicly.",
-  },
   safety: {
     eyebrow: "Safety, by design",
     title: "Privacy is part of the connection.",
@@ -41,33 +13,26 @@ const pageCopy = {
     section: "Tools you can use",
     body: "Only approved 18+ students can see profiles. You can block or report anyone from a chat — blocking instantly ends the match and hides you from each other. Reports go straight to moderators.",
   },
-  login: {
-    eyebrow: "A private preview",
-    title: "Student access is not open yet.",
-    description: "There is no approved university sign-in connection configured for this preview.",
-    section: "No university passwords",
-    body: "Never enter or share your university password here. Signing in alone would not verify student status or adult eligibility, so real access remains closed.",
-  },
   privacy: {
     eyebrow: "Your details belong to you",
     title: "Privacy comes before profiles.",
-    description: "AFTERCLASS is an independent student-focused project, not an official university service.",
-    section: "Before public access",
-    body: "A complete privacy policy and operational data-handling details must be in place before real users or personal information are accepted. This preview uses fictional profile examples only.",
+    description: "How AFTERCLASS handles your account, profile, photos, and student ID.",
+    section: "What we keep and who sees it",
+    body: "We store your student email, the profile you write, your photo, and your college ID. Your photo and profile are shown only to other approved students. Your college ID is visible only to you and the moderators who check it, and is never shown on your profile. Likes stay private unless they are mutual, and messages can only be read by the two people in the match. Exact location is never collected. AFTERCLASS is an independent student-focused project, not an official university service.",
   },
   guidelines: {
     eyebrow: "Community guidelines",
     title: "Kindness is the minimum.",
-    description: "The community is imagined as thoughtful, respectful, and entirely opt-in.",
+    description: "A thoughtful, respectful, entirely opt-in community for adult Adamas students.",
     section: "The basics",
-    body: "Respect a no. Be honest about who you are. Do not harass, threaten, impersonate, or share another person’s private information. Report safety concerns; never retaliate or pressure someone to respond.",
+    body: "Respect a no. Be honest about who you are. Do not harass, threaten, impersonate, or share another person’s private information. Report safety concerns; never retaliate or pressure someone to respond. Accounts that break these rules can be removed by moderators.",
   },
   contact: {
     eyebrow: "Get in touch",
-    title: "Still taking shape.",
+    title: "We’re here to help.",
     description: "AFTERCLASS is an independent student-focused project and is not operated by or affiliated with Adamas University.",
-    section: "Before launch",
-    body: "A reliable contact channel will be published before public access. This preview does not accept reports or personal information.",
+    section: "Reporting a problem",
+    body: "If someone makes you uncomfortable, open your chat with them and use Report or Block — reports go straight to our student moderators, who review every one. Questions about your ID check are answered in the note shown on your profile page after review.",
   },
 } as const;
 
@@ -138,14 +103,10 @@ function Feature({ icon, title, text }: { icon: React.ReactNode; title: string; 
 
 export function InformationPage({ kind }: { kind: PageKind }) {
   const info = pageCopy[kind];
-  const isDiscovery = kind === "discover";
-  const isMessaging = kind === "messages";
   return (
     <SiteFrame>
       <main className="mx-auto max-w-7xl px-5 py-14 md:px-8 md:py-20">
         <PageHeading eyebrow={info.eyebrow} title={info.title} description={info.description} />
-        {isDiscovery && <section className="mt-12"><div className="mb-5 flex items-end justify-between gap-4"><h2 className="font-display text-xl font-semibold text-foreground">A few fictional faces</h2><span className="text-xs text-muted-foreground">Example profiles only</span></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{demoProfiles.map((profile) => <ProfilePreview key={profile.name} profile={profile} />)}</div></section>}
-        {isMessaging && <section className="mt-12 max-w-3xl border border-border bg-card p-5 md:p-7"><div className="flex items-center gap-3"><MessageCircle aria-hidden="true" className="size-5 text-primary" /><p className="font-display text-lg font-semibold text-foreground">No conversations in this preview</p></div><p className="mt-3 text-sm leading-6 text-muted-foreground">No messages are sent or stored here. Conversations will only be possible between mutual matches after safety checks are in place.</p></section>}
         <div className="mt-12 max-w-3xl"><ContentSection title={info.section}><p>{info.body}</p><p className="mt-4 inline-flex items-center gap-2"><BookOpen aria-hidden="true" className="size-4 text-primary" />Learn about <Link to="/guidelines" className="text-foreground underline underline-offset-4">community guidelines</Link> and <Link to="/privacy" className="text-foreground underline underline-offset-4">privacy</Link>.</p></ContentSection></div>
       </main>
     </SiteFrame>
