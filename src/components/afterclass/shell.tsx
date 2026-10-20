@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowUpRight, LogOut } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
+import { ThemeToggle } from "@/components/afterclass/theme";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { meQuery } from "@/lib/afterclass";
@@ -59,13 +60,16 @@ export function SiteHeader() {
           ))}
           <Link to="/safety" className="text-sm text-muted-foreground transition-colors hover:text-foreground">Safety</Link>
         </nav>
-        {signedIn ? (
-          <Button size="sm" variant="outline" onClick={signOut}>Sign out <LogOut aria-hidden="true" /></Button>
-        ) : (
-          <Button asChild size="sm" variant="outline">
-            <Link to="/auth">Sign in <ArrowUpRight aria-hidden="true" /></Link>
-          </Button>
-        )}
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          {signedIn ? (
+            <Button size="sm" variant="outline" onClick={signOut}>Sign out <LogOut aria-hidden="true" /></Button>
+          ) : (
+            <Button asChild size="sm" variant="outline">
+              <Link to="/auth">Sign in <ArrowUpRight aria-hidden="true" /></Link>
+            </Button>
+          )}
+        </div>
       </div>
       {links.length > 0 && (
         <nav aria-label="Mobile navigation" className="flex gap-6 overflow-x-auto border-t border-border px-5 py-3 md:hidden">
