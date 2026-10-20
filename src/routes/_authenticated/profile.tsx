@@ -7,6 +7,7 @@ import { PageHeading } from "@/components/afterclass/shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { meQuery, signedUrls } from "@/lib/afterclass";
@@ -16,7 +17,6 @@ export const Route = createFileRoute("/_authenticated/profile")({
   component: ProfilePage,
 });
 
-const select = "flex h-9 w-full border border-input bg-transparent px-3 text-sm text-foreground";
 
 function ProfilePage() {
   const qc = useQueryClient();
@@ -41,6 +41,7 @@ function ProfilePage() {
     e.preventDefault();
     if (!me) return;
     if (!photo && !me.profile?.photo_path) { toast.error("Add a profile photo"); return; }
+    if (!form.gender) { toast.error("Choose how you identify under “I am”"); return; }
     setBusy(true);
     try {
       let photo_path = me.profile?.photo_path ?? null;
@@ -86,8 +87,29 @@ function ProfilePage() {
         </div>
         <div className="space-y-2"><Label htmlFor="name">Display name</Label><Input id="name" required maxLength={40} value={form.display_name} onChange={set("display_name")} /></div>
         <div className="space-y-2"><Label htmlFor="dob">Date of birth (18+ only)</Label><Input id="dob" type="date" required value={form.birthdate} onChange={set("birthdate")} /></div>
-        <div className="space-y-2"><Label htmlFor="gender">I am</Label><select id="gender" required className={select} value={form.gender} onChange={set("gender")}><option value="">Choose…</option><option value="woman">A woman</option><option value="man">A man</option><option value="nonbinary">Non-binary</option></select></div>
-        <div className="space-y-2"><Label htmlFor="int">Show me</Label><select id="int" className={select} value={form.interested_in} onChange={set("interested_in")}><option value="everyone">Everyone</option><option value="woman">Women</option><option value="man">Men</option><option value="nonbinary">Non-binary people</option></select></div>
+        <div className="space-y-2">
+          <Label htmlFor="gender">I am</Label>
+          <Select value={form.gender || undefined} onValueChange={(v) => setForm({ ...form, gender: v })}>
+            <SelectTrigger id="gender" className="w-full"><SelectValue placeholder="Choose…" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="woman">A woman</SelectItem>
+              <SelectItem value="man">A man</SelectItem>
+              <SelectItem value="nonbinary">Non-binary</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="int">Show me</Label>
+          <Select value={form.interested_in} onValueChange={(v) => setForm({ ...form, interested_in: v })}>
+            <SelectTrigger id="int" className="w-full"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="everyone">Everyone</SelectItem>
+              <SelectItem value="woman">Women</SelectItem>
+              <SelectItem value="man">Men</SelectItem>
+              <SelectItem value="nonbinary">Non-binary people</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <div className="space-y-2"><Label htmlFor="course">Course</Label><Input id="course" maxLength={60} value={form.course} onChange={set("course")} placeholder="e.g. B.Tech CSE" /></div>
         <div className="space-y-2"><Label htmlFor="year">Year</Label><Input id="year" maxLength={20} value={form.year} onChange={set("year")} placeholder="e.g. 3rd year" /></div>
         <div className="md:col-span-2 space-y-2"><Label htmlFor="bio">Bio</Label><Textarea id="bio" maxLength={300} value={form.bio} onChange={set("bio")} /></div>
