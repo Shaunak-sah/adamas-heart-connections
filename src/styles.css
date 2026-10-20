@@ -97,6 +97,47 @@
   --warning-foreground: oklch(0.2 0.02 80);
   --panel: oklch(0.13 0.007 285);
   --panel-foreground: oklch(0.96 0.009 15);
+  color-scheme: dark;
+}
+
+/* Light mode: warm paper tones, same rose accent. Toggled by the .light class on <html>. */
+:root.light {
+  --background: oklch(0.985 0.004 40);
+  --foreground: oklch(0.2 0.012 285);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.012 285);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.012 285);
+  --primary: oklch(0.52 0.17 14);
+  --primary-foreground: oklch(0.99 0.004 15);
+  --secondary: oklch(0.95 0.006 30);
+  --secondary-foreground: oklch(0.28 0.012 285);
+  --muted: oklch(0.955 0.005 30);
+  --muted-foreground: oklch(0.47 0.014 285);
+  --accent: oklch(0.94 0.025 14);
+  --accent-foreground: oklch(0.22 0.012 285);
+  --destructive: oklch(0.55 0.21 25);
+  --destructive-foreground: oklch(0.99 0.004 15);
+  --border: oklch(0.89 0.008 30);
+  --input: oklch(0.86 0.008 30);
+  --ring: oklch(0.55 0.15 14);
+  --sidebar: oklch(0.97 0.005 30);
+  --sidebar-foreground: oklch(0.2 0.012 285);
+  --sidebar-primary: oklch(0.52 0.17 14);
+  --sidebar-primary-foreground: oklch(0.99 0.004 15);
+  --sidebar-accent: oklch(0.94 0.025 14);
+  --sidebar-accent-foreground: oklch(0.22 0.012 285);
+  --sidebar-border: oklch(0.89 0.008 30);
+  --sidebar-ring: oklch(0.55 0.15 14);
+  --rose: oklch(0.58 0.15 14);
+  --rose-foreground: oklch(0.99 0.004 15);
+  --success: oklch(0.52 0.12 150);
+  --success-foreground: oklch(0.99 0.004 150);
+  --warning: oklch(0.62 0.13 70);
+  --warning-foreground: oklch(0.99 0.004 80);
+  --panel: oklch(0.96 0.006 30);
+  --panel-foreground: oklch(0.2 0.012 285);
+  color-scheme: light;
 }
 
 @layer base {

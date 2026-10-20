@@ -64,7 +64,7 @@ function ProfilePage() {
       const { error } = await supabase.from("profiles").update({
         display_name: form.display_name.trim(), birthdate: form.birthdate, gender: form.gender, interested_in: form.interested_in,
         course: form.course.trim(), year: form.year.trim(), bio: form.bio.trim(),
-        interests: form.interests.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 8), photo_path, onboarded: true,
+        interests: parseInterests(form.interests), photo_path, onboarded: true,
       }).eq("id", me.user.id);
       if (error) throw error;
       if (idFile) {
