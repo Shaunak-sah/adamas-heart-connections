@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Heart, LockKeyhole, MessageCircle, Shield, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, Heart, LockKeyhole, Shield, Sparkles } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
 import { demoProfiles, type DemoProfile } from "@/components/afterclass/data";
