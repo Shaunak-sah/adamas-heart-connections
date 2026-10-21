@@ -48,7 +48,7 @@ function ProfilePage() {
   useEffect(() => {
     const p = me?.profile;
     if (!p) return;
-    setForm({ display_name: p.display_name ?? "", birthdate: p.birthdate ?? "", gender: p.gender ?? "", interested_in: p.interested_in ?? "everyone", course: p.course ?? "", year: p.year ?? "", bio: p.bio ?? "", interests: (p.interests ?? []).join(", ") });
+    setForm({ display_name: p.display_name ?? "", birthdate: p.birthdate ?? "", gender: p.gender ?? "", interested_in: p.interested_in || "everyone", course: p.course ?? "", year: p.year ?? "", bio: p.bio ?? "", interests: (p.interests ?? []).join(", ") });
     setSlots(fillSlots(readPrompts(p.prompts)));
     const paths = p.photo_paths ?? [];
     signedUrls("photos", paths).then((m) => {

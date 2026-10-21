@@ -30,8 +30,8 @@ function Discover() {
       const seen = new Set((swiped ?? []).map((s) => s.target));
       const mine = me!.profile!;
       const list = (profiles ?? []).filter((p) => !seen.has(p.id)
-        && (mine.interested_in === "everyone" || p.gender === mine.interested_in)
-        && (p.interested_in === "everyone" || p.interested_in === mine.gender));
+        && (!mine.interested_in || mine.interested_in === "everyone" || p.gender === mine.interested_in)
+        && (!p.interested_in || p.interested_in === "everyone" || p.interested_in === mine.gender));
       const urls = await signedUrls("photos", list.flatMap((p) => p.photo_paths ?? []));
       return list.map((p) => ({ ...p, photos: (p.photo_paths ?? []).flatMap((path) => (urls[path] ? [urls[path]] : [])), prompts: readPrompts(p.prompts) }));
     },
