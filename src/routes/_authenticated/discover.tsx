@@ -8,6 +8,7 @@ import { Gate, PageHeading } from "@/components/afterclass/shell";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { meQuery, signedUrls } from "@/lib/afterclass";
+import { readPrompts } from "@/lib/profile-extras";
 
 export const Route = createFileRoute("/_authenticated/discover")({
   head: () => ({ meta: [{ title: "Discover · AFTERCLASS" }, { name: "description", content: "Meet verified Adamas students." }] }),
@@ -24,15 +25,15 @@ function Discover() {
       const uid = me!.user.id;
       const [{ data: swiped }, { data: profiles }] = await Promise.all([
         supabase.from("swipes").select("target").eq("swiper", uid),
-        supabase.from("profiles").select("id, display_name, birthdate, gender, interested_in, course, year, bio, interests, photo_path").neq("id", uid).limit(200),
+        supabase.from("profiles").select("id, display_name, birthdate, gender, interested_in, course, year, bio, interests, photo_paths, prompts").neq("id", uid).limit(200),
       ]);
       const seen = new Set((swiped ?? []).map((s) => s.target));
       const mine = me!.profile!;
       const list = (profiles ?? []).filter((p) => !seen.has(p.id)
         && (mine.interested_in === "everyone" || p.gender === mine.interested_in)
         && (p.interested_in === "everyone" || p.interested_in === mine.gender));
-      const urls = await signedUrls("photos", list.map((p) => p.photo_path));
-      return list.map((p) => ({ ...p, photo: p.photo_path ? urls[p.photo_path] : undefined }));
+      const urls = await signedUrls("photos", list.flatMap((p) => p.photo_paths ?? []));
+      return list.map((p) => ({ ...p, photos: (p.photo_paths ?? []).flatMap((path) => (urls[path] ? [urls[path]] : [])), prompts: readPrompts(p.prompts) }));
     },
   });
 
@@ -57,13 +58,15 @@ function Discover() {
           <div className="border border-border p-8 text-center"><p className="font-display text-lg text-foreground">You’re all caught up.</p><p className="mt-2 text-sm text-muted-foreground">Check back later as more students join.</p><Button asChild variant="outline" className="mt-5"><Link to="/matches">See matches</Link></Button></div>
         ) : (
           <ProfileCard
-            photo={current.photo}
+            key={current.id}
+            photos={current.photos}
             name={current.display_name}
             birthdate={current.birthdate}
             course={current.course}
             year={current.year}
             bio={current.bio}
             interests={current.interests}
+            prompts={current.prompts}
             actions={<>
               <Button variant="outline" size="lg" onClick={() => swipe(current.id, false)}><X aria-hidden="true" /> Pass</Button>
               <Button size="lg" onClick={() => swipe(current.id, true)}><Heart aria-hidden="true" /> Like</Button>
