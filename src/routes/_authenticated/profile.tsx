@@ -53,7 +53,7 @@ function ProfilePage() {
     const paths = p.photo_paths ?? [];
     signedUrls("photos", paths).then((m) => {
       photosRef.current.forEach((x) => x.file && URL.revokeObjectURL(x.url));
-      setPhotos(paths.filter((path) => m[path]).map((path) => ({ key: path, path, url: m[path] })));
+      setPhotos(paths.flatMap((path) => { const url = m[path]; return url ? [{ key: path, path, url }] : []; }));
     });
   }, [me?.profile]);
 
@@ -72,7 +72,7 @@ function ProfilePage() {
 
   function removePhoto(i: number) {
     const item = photos[i];
-    if (item.file) URL.revokeObjectURL(item.url);
+    if (item?.file) URL.revokeObjectURL(item.url);
     setPhotos(photos.filter((_, j) => j !== i));
   }
 

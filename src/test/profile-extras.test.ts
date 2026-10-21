@@ -13,7 +13,7 @@ describe("profile prompts", () => {
   });
 
   it("caps answers at 200 characters", () => {
-    expect(cleanPrompts([{ question: "a", answer: "x".repeat(250) }])[0].answer).toHaveLength(200);
+    expect(cleanPrompts([{ question: "a", answer: "x".repeat(250) }])[0]?.answer).toHaveLength(200);
   });
 
   it("never suggests a question already in use", () => {

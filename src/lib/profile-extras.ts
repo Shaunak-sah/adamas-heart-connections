@@ -29,10 +29,10 @@ export const PROMPT_QUESTIONS = [
 ] as const;
 
 /** A random question that isn't already used in another slot. */
-export function randomQuestion(exclude: string[], rand: () => number = Math.random) {
+export function randomQuestion(exclude: string[], rand: () => number = Math.random): string {
   const pool = PROMPT_QUESTIONS.filter((q) => !exclude.includes(q));
   const list = pool.length ? pool : PROMPT_QUESTIONS;
-  return list[Math.floor(rand() * list.length)];
+  return list[Math.floor(rand() * list.length)] ?? PROMPT_QUESTIONS[0];
 }
 
 /** Keep only answered prompts, trimmed, with no repeated questions, capped at MAX_PROMPTS. */
@@ -65,6 +65,6 @@ export function moveItem<T>(list: T[], from: number, to: number): T[] {
   if (to < 0 || to >= list.length || from === to) return list;
   const next = [...list];
   const [item] = next.splice(from, 1);
-  next.splice(to, 0, item);
+  if (item !== undefined) next.splice(to, 0, item);
   return next;
 }
