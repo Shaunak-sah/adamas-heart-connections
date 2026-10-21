@@ -76,7 +76,7 @@ function ProfilePage() {
     setPhotos(photos.filter((_, j) => j !== i));
   }
 
-  const setSlot = (i: number, patch: Partial<Prompt>) => setSlots(slots.map((s, j) => (j === i ? { ...s, ...patch } : s)));
+  const setSlot = (i: number, patch: Partial<Prompt>) => setSlots((prev) => prev.map((s, j) => (j === i ? { ...s, ...patch } : s)));
   const shuffleSlot = (i: number) => setSlot(i, { question: randomQuestion(slots.map((s) => s.question)) });
 
   async function save(e: React.FormEvent) {
@@ -191,7 +191,7 @@ function ProfilePage() {
         <div className="space-y-2"><Label htmlFor="dob">Date of birth (18+ only)</Label><Input id="dob" type="date" required value={form.birthdate} onChange={set("birthdate")} /></div>
         <div className="space-y-2">
           <Label htmlFor="gender">I am</Label>
-          <Select value={form.gender} onValueChange={(v) => setForm({ ...form, gender: v })}>
+          <Select value={form.gender} onValueChange={(v) => v && setForm((f) => ({ ...f, gender: v }))}>
             <SelectTrigger id="gender" className="w-full"><SelectValue placeholder="Choose…" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="woman">A woman</SelectItem>
@@ -202,7 +202,7 @@ function ProfilePage() {
         </div>
         <div className="space-y-2">
           <Label htmlFor="int">Show me</Label>
-          <Select value={form.interested_in} onValueChange={(v) => setForm({ ...form, interested_in: v })}>
+          <Select value={form.interested_in} onValueChange={(v) => v && setForm((f) => ({ ...f, interested_in: v }))}>
             <SelectTrigger id="int" className="w-full"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="everyone">Everyone</SelectItem>
@@ -225,7 +225,7 @@ function ProfilePage() {
           {slots.map((s, i) => (
             <div key={i} className="border border-border bg-panel p-4">
               <div className="flex gap-2">
-                <Select value={s.question} onValueChange={(q) => setSlot(i, { question: q })}>
+                <Select value={s.question} onValueChange={(q) => q && setSlot(i, { question: q })}>
                   <SelectTrigger aria-label={`Question ${i + 1}`} className="w-full"><SelectValue placeholder="Choose a question…" /></SelectTrigger>
                   <SelectContent>
                     {PROMPT_QUESTIONS.map((q) => (
