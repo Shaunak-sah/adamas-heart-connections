@@ -100,6 +100,7 @@ export type Database = {
           onboarded: boolean
           photo_path: string | null
           photo_paths: string[]
+          prompts: Json
           year: string | null
         }
         Insert: {
@@ -116,6 +117,7 @@ export type Database = {
           onboarded?: boolean
           photo_path?: string | null
           photo_paths?: string[]
+          prompts?: Json
           year?: string | null
         }
         Update: {
@@ -132,6 +134,7 @@ export type Database = {
           onboarded?: boolean
           photo_path?: string | null
           photo_paths?: string[]
+          prompts?: Json
           year?: string | null
         }
         Relationships: []
